@@ -5,6 +5,15 @@ require 'em-websocket'
 require 'json'
 require 'cgi'
 
+# ----------------------
+# WebSocket Simple Chat 
+# ----------------------
+#
+# Handshake Parameter : room_id, user_name
+#
+# Message format(json) : {"user" : name, "message" : msg}
+#
+
 class ChatUser
     attr_reader :room_id, :channel, :name
     attr_writer :channel, :name
@@ -57,15 +66,13 @@ include Chat
 
 EM.run {
 
-  @chat_users = Hash.new
+  puts "Start Websocket Server..."
 
-  puts "run?"
+  @chat_users = Hash.new
 
   EM::WebSocket.run(:host => "0.0.0.0", :port => 8080, :debug => false) do |ws|
 
     ws.onopen { |handshake|
-
-        puts handshake
 
         room_id = CGI.unescape(handshake.query['room_id'])
         name = CGI.unescape(handshake.query['user_name'])
@@ -104,3 +111,4 @@ EM.run {
 
   end
 }
+
