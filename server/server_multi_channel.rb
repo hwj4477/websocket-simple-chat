@@ -59,9 +59,13 @@ EM.run {
 
   @chat_users = Hash.new
 
+  puts "run?"
+
   EM::WebSocket.run(:host => "0.0.0.0", :port => 8080, :debug => false) do |ws|
 
     ws.onopen { |handshake|
+
+        puts handshake
 
         room_id = CGI.unescape(handshake.query['room_id'])
         name = CGI.unescape(handshake.query['user_name'])
